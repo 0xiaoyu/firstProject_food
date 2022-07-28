@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+    /**
+     * 新增的时候自动填充
+     * @param metaObject
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
         Long id = BaseContext.getCurrentId();
@@ -17,6 +21,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         metaObject.setValue("createUser", id);
     }
 
+    /**
+     * 修改的时候自动填充
+     * @param metaObject
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         Long id = BaseContext.getCurrentId();
