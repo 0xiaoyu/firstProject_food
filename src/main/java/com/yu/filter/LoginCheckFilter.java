@@ -1,6 +1,7 @@
 package com.yu.filter;
 
 import com.alibaba.fastjson2.JSON;
+import com.yu.common.BaseContext;
 import com.yu.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@WebFilter(filterName = "loginCheckFilter",urlPatterns = "/*")
+@WebFilter(filterName = "loginCheckFilter",urlPatterns = "/*")
 @Slf4j
 public class LoginCheckFilter implements Filter {
 
@@ -21,7 +22,8 @@ public class LoginCheckFilter implements Filter {
             "/employee/login",
             "/employee/logout",
             "/backend/**",
-            "/front/**"
+            "/front/**",
+            "/"
     };
 
     @Override
@@ -39,9 +41,12 @@ public class LoginCheckFilter implements Filter {
         if (check(uri)){
             filterChain.doFilter(request,response);
         }else {
-            if (request.getSession().getAttribute("employee")!=null){
+            Long id = (Long) request.getSession().getAttribute("employee");
+            if (id !=null){
+                BaseContext.setCurrentId(id);
                 filterChain.doFilter(request,response);
             }else {
+                log.info("拦截"+uri);
                 response.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
             }
         }

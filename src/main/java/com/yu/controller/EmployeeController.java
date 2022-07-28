@@ -14,7 +14,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -100,13 +99,12 @@ public class EmployeeController {
      */
     @PostMapping
     public R<String> add(HttpServletRequest request,@RequestBody Employee employee){
-        employee.setCreateTime(LocalDateTime.now());
+        /*employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         Long id = (Long) request.getSession().getAttribute("employee");
         employee.setCreateUser(id);
-        employee.setUpdateUser(id);
+        employee.setUpdateUser(id);*/
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-
 
         boolean b = employeeService.save(employee);
         if (b){
@@ -125,9 +123,9 @@ public class EmployeeController {
      */
     @PutMapping
     public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
-        Long upId = (Long) request.getSession().getAttribute("employee");
+        /*Long upId = (Long) request.getSession().getAttribute("employee");
         employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(upId);
+        employee.setUpdateUser(upId);*/
         employeeService.updateById(employee);
         return R.success("修改成功");
     }
