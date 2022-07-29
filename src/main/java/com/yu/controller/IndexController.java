@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IndexController {
 
+    //localhost的跳转
     @GetMapping
     public String index(){
         System.out.println("1");

@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
+/**
+ * 全局的报错处理器
+ */
 @RestControllerAdvice(annotations = {RestController.class, Controller.class})
 @Slf4j
 @ResponseBody
 public class GlobalExceptionHandler {
 
+    //名称已存在的报错
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<String> sqlExceptionHandler(SQLIntegrityConstraintViolationException ex) {
         String message = ex.getMessage();

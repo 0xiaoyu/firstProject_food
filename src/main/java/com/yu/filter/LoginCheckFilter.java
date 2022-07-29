@@ -18,6 +18,7 @@ public class LoginCheckFilter implements Filter {
 
     public static final AntPathMatcher PATH_MATCHER=new AntPathMatcher();
 
+    //放行的url
     static String[] urls=new String[]{
             "/employee/login",
             "/employee/logout",

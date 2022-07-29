@@ -117,12 +117,11 @@ public class EmployeeController {
 
     /**
      * 更新数据
-     * @param request
      * @param employee
      * @return
      */
     @PutMapping
-    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+    public R<String> update(@RequestBody Employee employee){
         /*Long upId = (Long) request.getSession().getAttribute("employee");
         employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(upId);*/
