@@ -1,6 +1,7 @@
 package com.yu.common;
 
 
+import com.yu.common.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,12 +21,17 @@ public class GlobalExceptionHandler {
 
     //名称已存在的报错
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public R<String> sqlExceptionHandler(SQLIntegrityConstraintViolationException ex) {
+    public R<String> exceptionHandler(SQLIntegrityConstraintViolationException ex) {
         String message = ex.getMessage();
         if (message.contains("Duplicate entry")){
             String[] s = message.split(" ");
             return R.error(s[2]+"已存在");
         }
         return R.error("出错了,请重试或联系管理员");
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        return R.error(ex.getMessage());
     }
 }
