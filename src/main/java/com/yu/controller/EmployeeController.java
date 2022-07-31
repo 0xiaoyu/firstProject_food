@@ -125,6 +125,8 @@ public class EmployeeController {
         /*Long upId = (Long) request.getSession().getAttribute("employee");
         employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(upId);*/
+        if (employee.getId()==1)
+            return R.error("不能修改管理员用户");
         employeeService.updateById(employee);
         return R.success("修改成功");
     }

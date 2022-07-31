@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yu.common.exception.CustomException;
 import com.yu.dao.CategoryDao;
 import com.yu.dao.DishDao;
+import com.yu.dao.SetMealDao;
 import com.yu.domain.Category;
 import com.yu.domain.Dish;
 import com.yu.domain.SetMeal;
@@ -20,7 +21,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
     private DishDao dishDao;
 
     @Autowired
-    private SetMealService setMealService;
+    private SetMealDao setMealDao;
 
     /**
      * 根据id删除分类
@@ -40,7 +41,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         //查询当前按分类是否关联的套餐
         LambdaQueryWrapper<SetMeal> slqw = new LambdaQueryWrapper<>();
         slqw.eq(SetMeal::getCategoryId,id);
-        long count1 = setMealService.count(slqw);
+        long count1 = setMealDao.selectCount(slqw);
         if (count1 > 0) {
             throw new CustomException("当前分类项关联了套餐，无法删除");
         }

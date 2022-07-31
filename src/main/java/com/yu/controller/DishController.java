@@ -28,24 +28,50 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    /**
+     * 分页获取菜品
+     *
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
     @GetMapping("/page")
     public R<Page> getByPage(int page, int pageSize, String name) {
-        Page pd=dishService.getByPage(page,pageSize,name);
+        Page pd = dishService.getByPage(page, pageSize, name);
         return R.success(pd);
     }
 
+    /**
+     * 新增菜品
+     *
+     * @param dishDto
+     * @return
+     */
     @PostMapping
     public R<String> save(@RequestBody DishDto dishDto) {
         dishService.saveWithFlavor(dishDto);
         return R.success("新增成功");
     }
 
+    /**
+     * 根据id查询菜品消息和口味信息
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public R<DishDto> getByIdWithDishDto(@PathVariable Long id) {
         DishDto dishDto = dishService.getByIdWithDishDto(id);
         return R.success(dishDto);
     }
 
+    /**
+     * 更新菜品和口味
+     *
+     * @param dishDto
+     * @return
+     */
     @PutMapping
     public R<String> updateWithDishDto(@RequestBody DishDto dishDto) {
         boolean b = dishService.updateWithDishDto(dishDto);
@@ -55,12 +81,18 @@ public class DishController {
             return R.error("失败了");
     }
 
+    /**
+     * 修改状态
+     *
+     * @param ids
+     * @param status
+     * @return
+     */
     @PostMapping("/status/{status}")
-    public R<String> stopDish(Long[] ids,@PathVariable int status){
-        System.out.println(Arrays.toString(ids));
-        List<Dish> dishes=new ArrayList<>();
+    public R<String> stopDish(Long[] ids, @PathVariable int status) {
+        List<Dish> dishes = new ArrayList<>();
         for (Long id : ids) {
-            Dish dish=new Dish();
+            Dish dish = new Dish();
             dish.setId(id);
             dish.setStatus(status);
             dishes.add(dish);
@@ -69,11 +101,30 @@ public class DishController {
         return R.success("修改成功");
     }
 
+    /**
+     * 删除
+     *
+     * @param ids
+     * @return
+     */
     @DeleteMapping
-    public R<String> deleteByIds(Long[] ids){
+    public R<String> deleteByIds(Long[] ids) {
         dishService.deleteWithImagesAndFlavor(ids);
         return R.success("删除成功");
     }
 
-
+    /**
+     * 根据条件获取菜品
+     *
+     * @param dish
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<DishDto>> list(Dish dish) {
+        List<DishDto> dishDtoList = dishService.listWithDto(dish);
+        if (dishDtoList != null)
+            return R.success(dishDtoList);
+        else
+            return R.error("出错了");
+    }
 }

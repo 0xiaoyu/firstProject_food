@@ -6,6 +6,8 @@ import com.yu.domain.Dish;
 import com.yu.dto.DishDto;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Transactional
 public interface DishService extends IService<Dish> {
@@ -19,4 +21,7 @@ public interface DishService extends IService<Dish> {
 
 
     boolean deleteWithImagesAndFlavor(Long[] ids);
+
+
+    List<DishDto> listWithDto(Dish dish);
 }

@@ -20,7 +20,6 @@ public class CommonController {
 
     @Value("${Image.path}")
     private String path;
-
     @PostMapping("/upload")
     public R<String> upload(MultipartFile file){
 
@@ -28,8 +27,6 @@ public class CommonController {
         String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
         String fileName = UUID.randomUUID()+suffix;
-
-        System.out.println(fileName);
         File dir=new File(path);
         if (!dir.exists())
             dir.mkdirs();
