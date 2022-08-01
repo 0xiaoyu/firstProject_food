@@ -1,6 +1,8 @@
 package com.yu.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yu.common.R;
+import com.yu.dao.OrdersDto;
 import com.yu.domain.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,4 +19,6 @@ public interface OrdersService extends IService<Orders> {
     void submit(Orders orders);
 
     Page getByPage(int page, int pageSize);
+
+    Page<OrdersDto> backendPage(int page, int pageSize, Long number, String beginTime,String endTime);
 }

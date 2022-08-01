@@ -84,11 +84,11 @@
               查看
             </el-button>
             <el-divider v-if="row.status === 2" direction="vertical"></el-divider>
-            <el-button v-if="row.status === 2" type="text" @click="cancelOrDeliveryOrComplete(3, row.id)" class="blueBug">
+            <el-button v-if="row.status === 2" type="text" @click="cancelOrDeliveryOrComplete(3, row.number)" class="blueBug">
               派送
             </el-button>
             <el-divider v-if="row.status === 3" direction="vertical"></el-divider>
-            <el-button v-if="row.status === 3" type="text" @click="cancelOrDeliveryOrComplete(4, row.id)" class="blueBug">
+            <el-button v-if="row.status === 3" type="text" @click="cancelOrDeliveryOrComplete(4, row.number)" class="blueBug">
               完成
             </el-button>
           </template>

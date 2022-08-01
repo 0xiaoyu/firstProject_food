@@ -1,6 +1,7 @@
 package com.yu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yu.common.exception.CustomException;
@@ -8,6 +9,7 @@ import com.yu.dao.SetMealDao;
 import com.yu.domain.Category;
 import com.yu.domain.SetMeal;
 import com.yu.domain.SetmealDish;
+import com.yu.dto.MealDto;
 import com.yu.dto.SetmealDto;
 import com.yu.service.CategoryService;
 import com.yu.service.SetMealService;
@@ -77,16 +79,48 @@ public class SetMealServiceImpl extends ServiceImpl<SetMealDao, SetMeal> impleme
     public void deleteWith(Long[] ids) {
         for (Long id : ids) {
             SetMeal setMeal = this.getById(id);
-            if (setMeal.getStatus()==0)
+            if (setMeal.getStatus() == 0)
                 throw new CustomException("存在售卖的商品");
             String image = setMeal.getImage();
             this.removeById(id);
-            LambdaQueryWrapper<SetmealDish> lqw=new LambdaQueryWrapper<>();
-            lqw.eq(SetmealDish::getSetmealId,id);
+            LambdaQueryWrapper<SetmealDish> lqw = new LambdaQueryWrapper<>();
+            lqw.eq(SetmealDish::getSetmealId, id);
             setmealDishService.remove(lqw);
-            File file=new File(path+image);
+            File file = new File(path + image);
             file.delete();
         }
+    }
+
+    @Override
+    public SetmealDto selectById(Long id) {
+        if (id == null)
+            return null;
+        //依据id查询setmeal
+        SetmealDto dto = new SetmealDto();
+        SetMeal setMeal = this.getById(id);
+        BeanUtils.copyProperties(setMeal, dto);
+        //依据setmealid查询setmealdish信息
+        LambdaQueryWrapper<SetmealDish> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(SetmealDish::getSetmealId, id);
+        List<SetmealDish> list = setmealDishService.list(lqw);
+        Category category = categoryService.getById(setMeal.getCategoryId());
+        dto.setCategoryName(category.getName());
+        dto.setSetmealDishes(list);
+        return dto;
+    }
+
+    @Override
+    public boolean updateWithDto(SetmealDto setmealDto) {
+        Long id = setmealDto.getId();
+        List<SetmealDish> setmealDishes = setmealDto.getSetmealDishes();
+        LambdaQueryWrapper<SetmealDish> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(SetmealDish::getSetmealId, id);
+        setmealDishService.remove(lqw);
+        setmealDishes.stream().forEach(setmealDish ->
+                setmealDish.setSetmealId(String.valueOf(id)));
+        setmealDishService.saveBatch(setmealDishes);
+        this.updateById(setmealDto);
+        return true;
     }
 
 

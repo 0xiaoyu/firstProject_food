@@ -37,7 +37,7 @@ public class UserController {
         if (email != null && !email.isEmpty()) {
             String s = ValidateCodeUtils.generateValidateCode(6).toString();
             System.out.println("code=" + s);
-            mailService.sendSimpleTextMail(email,s);
+            //mailService.sendSimpleTextMail(email,s);
             session.setAttribute("email", s);
             return R.success("验证码发送成功");
         }

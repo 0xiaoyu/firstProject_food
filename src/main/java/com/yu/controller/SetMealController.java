@@ -39,25 +39,41 @@ public class SetMealController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> getByPage(int page, int pageSize, String name) {
+    public R<Page> backendgetByPage(int page, int pageSize, String name) {
         Page p = service.getByPage(page, pageSize, name);
         return R.success(p);
     }
 
+    /**
+     * 新增套餐
+     * @param setmealDto
+     * @return
+     */
     @PostMapping
-    public R<String> save(@RequestBody SetmealDto setmealDto) {
+    public R<String> backendsave(@RequestBody SetmealDto setmealDto) {
         service.saveWithDish(setmealDto);
         return R.success("添加成功");
     }
 
+    /**
+     * 删除套餐
+     * @param ids
+     * @return
+     */
     @DeleteMapping
-    public R<String> delete(Long[] ids) {
+    public R<String> backenddelete(Long[] ids) {
         service.deleteWith(ids);
         return R.success("删除成功");
     }
 
+    /**
+     * 修改套餐状态
+     * @param status
+     * @param ids
+     * @return
+     */
     @PostMapping("/status/{status}")
-    public R<String> updateStatus(@PathVariable int status,Long[] ids ) {
+    public R<String> backendupdateStatus(@PathVariable int status,Long[] ids ) {
         for (Long id : ids) {
             SetMeal sm = new SetMeal();
             sm.setId(id);
@@ -67,6 +83,11 @@ public class SetMealController {
         return R.success("修改成功");
     }
 
+    /**
+     * 用户获取套餐信息
+     * @param setMeal
+     * @return
+     */
     @GetMapping("/list")
     public R<List<SetMeal>> list(SetMeal setMeal){
         LambdaQueryWrapper<SetMeal> lqw=new LambdaQueryWrapper<>();
@@ -78,6 +99,11 @@ public class SetMealController {
         return R.success(setMeals);
     }
 
+    /**
+     * 获取套餐的食品
+     * @param id
+     * @return
+     */
     @GetMapping("/dish/{id}")
     public R<List<MealDto>> getDishById(@PathVariable Long id){
         LambdaQueryWrapper<SetmealDish> lqw=new LambdaQueryWrapper<>();
@@ -93,6 +119,28 @@ public class SetMealController {
             return meal;
         }).collect(Collectors.toList());
         return R.success(meals);
+    }
+
+    /**
+     * 获取套餐的信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<SetmealDto> getById(@PathVariable Long id){
+        SetmealDto setmealDto = service.selectById(id);
+        return R.success(setmealDto);
+    }
+
+    /**
+     * 修改套餐信息
+     * @param setmealDto
+     * @return
+     */
+    @PutMapping
+    public R<String> backendupdate(@RequestBody SetmealDto setmealDto){
+        boolean b = service.updateWithDto(setmealDto);
+        return b?R.success("修改成功"):R.error("修改失败");
     }
 
 }

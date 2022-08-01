@@ -22,11 +22,10 @@ public class CategoryController {
      * @return
      */
     @PostMapping
-    public R<String> addCategory(@RequestBody Category category){
+    public R<String> backendaddCategory(@RequestBody Category category){
         categoryService.save(category);
         return R.success("添加成功");
     }
-
     /**
      * 分页查询
      * @param page
@@ -34,7 +33,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> getAll(int page, int pageSize){
+    public R<Page> backendgetAll(int page, int pageSize){
         Page p=new Page(page,pageSize);
         LambdaQueryWrapper<Category> lqw=new LambdaQueryWrapper<>();
         lqw.orderByAsc(Category::getSort);
@@ -48,7 +47,7 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public R<String> deleteById(@PathVariable Long id){
+    public R<String> backenddeleteById(@PathVariable Long id){
         categoryService.remove(id);
         return R.success("删除"+id);
     }
@@ -59,7 +58,7 @@ public class CategoryController {
      * @return
      */
     @PutMapping
-    public R<String> updateCategory(@RequestBody Category category){
+    public R<String> backendupdateCategory(@RequestBody Category category){
         categoryService.updateById(category);
         return R.success("修改成功");
     }

@@ -80,7 +80,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> page(int page, int pageSize, String name){
+    public R<Page> backendpage(int page, int pageSize, String name){
         Page iPage=new Page(page,pageSize);
 
         LambdaQueryWrapper<Employee> lqw=new LambdaQueryWrapper();
@@ -98,7 +98,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
-    public R<String> add(HttpServletRequest request,@RequestBody Employee employee){
+    public R<String> backendadd(HttpServletRequest request,@RequestBody Employee employee){
         /*employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         Long id = (Long) request.getSession().getAttribute("employee");
@@ -121,7 +121,7 @@ public class EmployeeController {
      * @return
      */
     @PutMapping
-    public R<String> update(@RequestBody Employee employee){
+    public R<String> backendupdate(@RequestBody Employee employee){
         /*Long upId = (Long) request.getSession().getAttribute("employee");
         employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(upId);*/
@@ -137,7 +137,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/{id}")
-    public R<Employee> selectById(@PathVariable Long id){
+    public R<Employee> backendselectById(@PathVariable Long id){
         Employee employee = employeeService.getById(id);
         return R.success(employee);
     }

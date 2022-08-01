@@ -37,7 +37,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> getByPage(int page, int pageSize, String name) {
+    public R<Page> backendgetByPage(int page, int pageSize, String name) {
         Page pd = dishService.getByPage(page, pageSize, name);
         return R.success(pd);
     }
@@ -49,7 +49,7 @@ public class DishController {
      * @return
      */
     @PostMapping
-    public R<String> save(@RequestBody DishDto dishDto) {
+    public R<String> backendsave(@RequestBody DishDto dishDto) {
         dishService.saveWithFlavor(dishDto);
         return R.success("新增成功");
     }
@@ -73,7 +73,7 @@ public class DishController {
      * @return
      */
     @PutMapping
-    public R<String> updateWithDishDto(@RequestBody DishDto dishDto) {
+    public R<String> backendupdateWithDishDto(@RequestBody DishDto dishDto) {
         boolean b = dishService.updateWithDishDto(dishDto);
         if (b)
             return R.success("更新成功");
@@ -89,7 +89,7 @@ public class DishController {
      * @return
      */
     @PostMapping("/status/{status}")
-    public R<String> stopDish(Long[] ids, @PathVariable int status) {
+    public R<String> backendstopDish(Long[] ids, @PathVariable int status) {
         List<Dish> dishes = new ArrayList<>();
         for (Long id : ids) {
             Dish dish = new Dish();
@@ -108,7 +108,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
-    public R<String> deleteByIds(Long[] ids) {
+    public R<String> backenddeleteByIds(Long[] ids) {
         dishService.deleteWithImagesAndFlavor(ids);
         return R.success("删除成功");
     }
