@@ -37,7 +37,11 @@ public class UserController {
         if (email != null && !email.isEmpty()) {
             String s = ValidateCodeUtils.generateValidateCode(6).toString();
             System.out.println("code=" + s);
-            mailService.sendSimpleTextMail(email,s);
+            try {
+                mailService.sendSimpleTextMail(email, s);
+            }catch (Exception e){
+                return R.error("邮箱不存在，发送失败");
+            }
             session.setAttribute("email", s);
             return R.success("验证码发送成功");
         }
@@ -61,7 +65,7 @@ public class UserController {
                 one.setEmail(email);
                 service.save(one);
             }
-            session.setAttribute("user",one.getId());
+            session.setAttribute("user", one.getId());
             return R.success(one);
         }
 
@@ -69,7 +73,7 @@ public class UserController {
     }
 
     @PostMapping("/loginout")
-    public R<String> loginout(HttpSession session){
+    public R<String> loginout(HttpSession session) {
         session.removeAttribute("email");
         return R.success("退出成功");
     }
