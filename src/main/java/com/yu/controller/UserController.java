@@ -32,12 +32,11 @@ public class UserController {
 
     /**
      * 发送验证码
-     *
      * @param user
      * @return
      */
     @PostMapping("/sendMsg")
-    public R<String> sendMsg(@RequestBody Euser user, HttpSession session) {
+    public R<String> sendMsg(@RequestBody Euser user) {
         String email = user.getEmail();
         if (email != null && !email.isEmpty()) {
             String s = ValidateCodeUtils.generateValidateCode(6).toString();
@@ -76,7 +75,6 @@ public class UserController {
                 service.save(one);
             }
             session.setAttribute("user", one.getId());
-
             redisTemplate.delete(email);
             return R.success(one);
         }
