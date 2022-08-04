@@ -12,6 +12,8 @@ import com.yu.service.SetMealService;
 import com.yu.service.SetmealDishService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +52,7 @@ public class SetMealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> backendsave(@RequestBody SetmealDto setmealDto) {
         service.saveWithDish(setmealDto);
         return R.success("添加成功");
@@ -61,6 +64,7 @@ public class SetMealController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> backenddelete(Long[] ids) {
         service.deleteWith(ids);
         return R.success("删除成功");
@@ -73,6 +77,7 @@ public class SetMealController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> backendupdateStatus(@PathVariable int status,Long[] ids ) {
         for (Long id : ids) {
             SetMeal sm = new SetMeal();
@@ -89,6 +94,7 @@ public class SetMealController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache",key = "#setMeal.categoryId+'_'+#setMeal.status")
     public R<List<SetMeal>> list(SetMeal setMeal){
         LambdaQueryWrapper<SetMeal> lqw=new LambdaQueryWrapper<>();
         lqw.eq(setMeal.getCategoryId()!=null,SetMeal::getCategoryId,setMeal.getCategoryId());
@@ -138,6 +144,7 @@ public class SetMealController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> backendupdate(@RequestBody SetmealDto setmealDto){
         boolean b = service.updateWithDto(setmealDto);
         return b?R.success("修改成功"):R.error("修改失败");
