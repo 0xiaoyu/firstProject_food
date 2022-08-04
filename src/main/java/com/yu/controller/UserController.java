@@ -42,11 +42,11 @@ public class UserController {
         if (email != null && !email.isEmpty()) {
             String s = ValidateCodeUtils.generateValidateCode(6).toString();
             System.out.println("code=" + s);
-            /*try {
+            try {
                 mailService.sendSimpleTextMail(email, s);
             }catch (Exception e){
                 return R.error("邮箱不存在，发送失败");
-            }*/
+            }
 
             //session.setAttribute("email", s);
             redisTemplate.opsForValue().set(email,s,3, TimeUnit.MINUTES);
