@@ -25,6 +25,11 @@ spring:
       mail.smtp.socketFactory.port: 465
       mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
       mail.smtp.socketFactory.fallback: false
+  redis:
+    host: localhost
+    port: 6379
+    password: redis1647022985
+    database: 0
 
 mybatis-plus:
   configuration:

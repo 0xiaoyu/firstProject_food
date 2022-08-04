@@ -156,6 +156,7 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements DishS
     @Override
     public boolean deleteWithImagesAndFlavor(Long[] ids) {
         for (Long id : ids) {
+
             LambdaQueryWrapper<Dish> lqw = new LambdaQueryWrapper<>();
             lqw.select(Dish::getImage, Dish::getId);
             lqw.eq(Dish::getId, id);
