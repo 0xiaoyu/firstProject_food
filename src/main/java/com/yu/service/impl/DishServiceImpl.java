@@ -1,11 +1,9 @@
 package com.yu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiniu.common.QiniuException;
 import com.yu.dao.DishDao;
 import com.yu.domain.Category;
 import com.yu.domain.Dish;
@@ -14,15 +12,12 @@ import com.yu.dto.DishDto;
 import com.yu.service.CategoryService;
 import com.yu.service.DishFlavorService;
 import com.yu.service.DishService;
+import com.yu.service.qiniu.QiniuService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +33,11 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements DishS
     @Autowired
     private CategoryService categoryService;
 
-    @Value("${Image.path}")
-    private String path;
+    @Autowired
+    private QiniuService qiniuService;
+
+//    @Value("${Image.path}")
+//    private String path;
 
     /**
      * 新增菜品同时加上口味数据
@@ -156,13 +154,17 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements DishS
     @Override
     public boolean deleteWithImagesAndFlavor(Long[] ids) {
         for (Long id : ids) {
-
             LambdaQueryWrapper<Dish> lqw = new LambdaQueryWrapper<>();
             lqw.select(Dish::getImage, Dish::getId);
             lqw.eq(Dish::getId, id);
             Dish dish = dishDao.selectById(id);
-            File file=new File(path+dish.getImage());
-            file.delete();
+            /*File file=new File(path+dish.getImage());
+            file.delete();*/
+            try {
+                qiniuService.delete(dish.getImage());
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
             this.removeById(id);
             LambdaQueryWrapper<DishFlavor> df=new LambdaQueryWrapper<>();
             df.eq(DishFlavor::getDishId,id);

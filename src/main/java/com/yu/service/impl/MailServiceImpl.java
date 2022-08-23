@@ -37,7 +37,7 @@ public class MailServiceImpl implements MailService {
         message.setSubject("余的项目验证码");
         String c="[服务]尊敬的用户,您好:\n本次请求的验证码为:"+content+"，验证码只有3分钟有效时间，请妥善保管\n如非本人操作，请忽略该邮件。\n(这是一封自动发送的邮件，请不要直接回复）";
         message.setText(c);
-        message.setFrom(from);
+        message.setFrom(from+"(外卖项目)");
         mailSender.send(message);
         log.info("【文本邮件】成功发送！to={}", to);
     }

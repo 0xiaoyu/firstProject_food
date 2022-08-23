@@ -6,6 +6,7 @@ import com.yu.domain.Euser;
 import com.yu.service.EuserService;
 import com.yu.service.impl.MailServiceImpl;
 import com.yu.utils.ValidateCodeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -44,12 +46,12 @@ public class UserController {
             try {
                 mailService.sendSimpleTextMail(email, s);
             }catch (Exception e){
+                log.error("邮箱发送失败，或者授权码15天过期了");
                 return R.error("邮箱不存在，发送失败");
             }
 
             //session.setAttribute("email", s);
             redisTemplate.opsForValue().set(email,s,3, TimeUnit.MINUTES);
-
             return R.success("验证码发送成功");
         }
         return R.error("发送失败");

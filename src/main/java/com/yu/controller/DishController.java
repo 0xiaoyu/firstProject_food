@@ -9,6 +9,7 @@ import com.yu.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -45,6 +49,7 @@ public class DishController {
     @PostMapping
     public R<String> backendsave(@RequestBody DishDto dishDto) {
         dishService.saveWithFlavor(dishDto);
+        redisTemplate.opsForSet().add("dishImageCache",dishDto.getImage());
         return R.success("新增成功");
     }
 
