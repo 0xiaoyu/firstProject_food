@@ -16,6 +16,7 @@ import com.yu.service.qiniu.QiniuService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,9 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements DishS
 
     @Autowired
     private QiniuService qiniuService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 //    @Value("${Image.path}")
 //    private String path;
@@ -160,11 +164,15 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements DishS
             Dish dish = dishDao.selectById(id);
             /*File file=new File(path+dish.getImage());
             file.delete();*/
+            //删除图片信息
             try {
+                redisTemplate.opsForSet().remove("dishImageResourceCache",dish.getImage());
+                redisTemplate.opsForSet().remove("dishImageCache",dish.getImage());
                 qiniuService.delete(dish.getImage());
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
+            //删除数据库的dishDto
             this.removeById(id);
             LambdaQueryWrapper<DishFlavor> df=new LambdaQueryWrapper<>();
             df.eq(DishFlavor::getDishId,id);
