@@ -15,7 +15,7 @@ spring:
     host: smtp.qq.com
     port: 465
     username: 1647022985@qq.com
-    password: mhqvoayqgrzpdfic
+    password: 
     protocol: smtp
     default-encoding: UTF-8
     properties:
@@ -48,8 +48,8 @@ Image:
 
 # ============= 七牛云配置  ===========
 qiniu:
-  accessKey: wEdI-wqMXsUpwYftG_P6bu0TesdYfthLPNgExywP
-  secretKey: MEsOuaDA9YreVpV6ODi37yvrgl9I2nL1C5Y7Cn7x
+  accessKey: 
+  secretKey:
   # 对象储存
   bucket: yu-waimai # 空间名称
   region: huadongzejiang # 存储区域,直接填拼音
